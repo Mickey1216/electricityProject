@@ -4,6 +4,8 @@ import axios from 'axios'
 import nprogress from 'nprogress'
 //引入进度条的样式
 import "nprogress/nprogress.css"
+//引入仓库
+import store from '../store'
 
 //1.利用axios对象的方法create，去创建一个axios对象
 //2.requests就是axios，只不过要稍微配置一下
@@ -18,7 +20,15 @@ const requests = axios.create({
 requests.interceptors.request.use((config)=>{  //config：配置对象，对象里面有一个属性很重要，header请求头
     //进度条开始动
     nprogress.start()
-
+    if(store.state.detail.uuid_token){
+        //给请求头添加一个字段(userTempId)--必须在和后端商量好的前提下
+        config.headers.userTempId = store.state.detail.uuid_token
+    }
+    
+    if(store.state.user.token){
+        //需要携带token带给服务器
+        config.headers.token = store.state.user.token
+    }
     return config
 })
 

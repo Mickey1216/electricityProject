@@ -18,12 +18,15 @@ import store from './store'
 import './mock/mockServe'
 //引入swiper样式
 import 'swiper/css/swiper.css'
+//统一引入api文件夹里面全部请求函数
+import * as API from './api'
 
 new Vue({
   render: h => h(App),
   //全局事件总线$bus的配置
   beforeCreate(){
     Vue.prototype.$bus = this
+    Vue.prototype.$API = API
   },
   //注册路由，当这里书写router的时候，组件身上都拥有$router,$route属性
   router,

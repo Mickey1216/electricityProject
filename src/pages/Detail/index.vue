@@ -83,7 +83,8 @@
                 <a href="javascript:" class="mins" @click="skuNum>1?skuNum--:skuNum=1">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <!-- 在加入购物车进行路由跳转之前，发请求把你购买的产品信息通过请求的形式通知服务器，服务器进行相应的存储。 -->
+                <a href="javascript:" @click="addShopCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -360,8 +361,34 @@ export default {
     //表单元素修改产品个数
     changeSkuNum(event){
       //用户输入的数字乘以1
-      event.target.value
-    }
+      let value = event.target.value * 1
+      if(isNaN(value) || value < 1){  //用户输入非法
+        this.skuNum = 1
+      }else{
+        this.skuNum = parseInt(value)
+      }
+    },
+    //加入购物车
+    async addShopCart(){
+      //1.发请求，将产品加入到数据库（通知服务器）
+      try {
+        await this.$store.dispatch('addOrUpdateShopCart',{
+          skuId:this.$route.params.skuId,
+          skuNum:this.skuNum
+        })
+        //2.服务器存储成功，进行路由跳转并且传递参数（产品信息）
+        /*
+        简单的数据，如skuNum，通过query形式给路由组件传递过去
+        复杂的数据，如skuInfo，通过会话存储session-storage（不持久化，会话结束数据就消失）
+        本地存储|会话存储：一般存储的是字符串，不能存储对象
+        */
+        this.$router.push({name:'addcartsuccess',query:{skuNum:this.skuNum}})
+        sessionStorage.setItem("SKUINFO",JSON.stringify(this.skuInfo))
+      } catch (error) {
+        //3.失败，给用户进行提示
+        alert(error.message)
+      }
+    },
   }
 };
 </script>
