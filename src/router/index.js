@@ -42,7 +42,7 @@ let router = new VueRouter({
     }
 })
 
-//全局守卫：前置守卫（在路由跳转之前进行判断）
+//全局守卫（用的多）：前置守卫（在路由跳转之前进行判断）
 router.beforeEach(async (to,from,next)=>{
     //to:可以获取到你要跳转到的那个的路由信息；form:可以获取到你从哪个路由而来的信息;next:放行函数
     //next的写法：next()--直接方行；next(path)--放行到指定的路由；next(false)
@@ -68,8 +68,13 @@ router.beforeEach(async (to,from,next)=>{
               }
             }
         }
-    }else{ //用户未登录
-        next()
+    }else{ //用户未登录，不能去交易[trade]相关、支付相关[pay|paysuccess]、个人中心[center]页面
+        let toPath = to.path
+        if(toPath.indexOf('/trade') !== -1 || toPath.indexOf('/pay') !== -1 || toPath.indexOf('/center') !== -1){
+            next('/login?redirect='+toPath)
+        }else{
+            next()
+        }
     }
 })
 

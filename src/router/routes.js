@@ -1,5 +1,5 @@
 //路由配置的信息
-//引入路由组件
+//引入一级路由组件
 import Home from '../pages/Home'
 import Search from '../pages/Search'
 import Login from '../pages/Login'
@@ -9,17 +9,62 @@ import AddCartSuccess from '../pages/AddCartSuccess'
 import ShopCart from '../pages/ShopCart'
 import Trade from '../pages/Trade'
 import Pay from '../pages/Pay'
+import PaySuccess from '../pages/PaySuccess'
+import Center from '../pages/Center'
+//引入二级路由组件
+import MyOrder from '../pages/Center/myOrder'
+import GroupOrder from '../pages/Center/groupOrder'
 
 export default [
     {
+        path:"/center",
+        component:Center,
+        meta:{show:true},
+        children:[
+            {
+                path:'myorder',
+                component:MyOrder
+            },
+            {
+                path:'grouporder',
+                component:GroupOrder
+            },
+            {
+                path:'/center',
+                redirect:'/center/myorder'
+            }
+        ]
+    },
+    {
+        path:"/paysuccess",
+        component:PaySuccess,
+        meta:{show:true}
+    },
+    {
         path:"/pay",
         component:Pay,
-        meta:{show:true}
+        meta:{show:true},
+        //路由独享守卫（用的多）
+        beforeEnter:(to,form,next)=>{
+            if(form.path === '/trade'){ //去支付页面，必须是从交易而来
+                next()
+            }else{ //从其它路由组件来的，停留在当前
+                next(false)
+            }
+        }
     },
     {
         path:"/trade",
         component:Trade,
-        meta:{show:true}
+        meta:{show:true},
+        //路由独享守卫
+        beforeEnter:(to,form,next)=>{
+            if(form.path === '/shopcart'){ //去交易页面，必须是从购物车而来
+                next()
+            }else{ //从其它路由组件来的，停留在当前
+                next(false)
+            }
+        }
     },
     {
         path:"/shopcart",
