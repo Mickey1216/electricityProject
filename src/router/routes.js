@@ -1,19 +1,19 @@
 //路由配置的信息
-//引入一级路由组件
-import Home from '../pages/Home'
-import Search from '../pages/Search'
-import Login from '../pages/Login'
-import Register from '../pages/Register'
-import Detail from '../pages/Detail'
-import AddCartSuccess from '../pages/AddCartSuccess'
-import ShopCart from '../pages/ShopCart'
-import Trade from '../pages/Trade'
-import Pay from '../pages/Pay'
-import PaySuccess from '../pages/PaySuccess'
-import Center from '../pages/Center'
+//引入一级路由组件--使用路由懒加载的方式--好处：将不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应的组件，这样更高效。
+const Home = ()=> import('../pages/Home')
+const Search = ()=> import('../pages/Search')
+const Login = ()=> import('../pages/Login')
+const Register = ()=> import('../pages/Register')
+const Detail = ()=> import('../pages/Detail')
+const AddCartSuccess = ()=> import('../pages/AddCartSuccess')
+const ShopCart = ()=> import('../pages/ShopCart')
+const Trade = ()=> import('../pages/Trade')
+const Pay = ()=> import('../pages/Pay')
+const PaySuccess = ()=> import('../pages/PaySuccess')
+const Center = ()=> import('../pages/Center')
 //引入二级路由组件
-import MyOrder from '../pages/Center/myOrder'
-import GroupOrder from '../pages/Center/groupOrder'
+const MyOrder = ()=> import('../pages/Center/myOrder')
+const GroupOrder = ()=> import('../pages/Center/groupOrder')
 
 export default [
     {
